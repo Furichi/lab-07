@@ -3,10 +3,10 @@
 # Remove any old Testcase#Diff folders before running
 rm -rf Testcase*Diff
 
-# Loop through each testcase directory
+# Loop through ieach testcase directory
 for dir in Testcase*/; do
-    dir="${dir%/}"
-    diff_dir="${dir}Diff"
+    dir="${dir%/}" # Remove / from testcases
+    diff_dir="${dir}Diff" # Attach Diff to testcases
 
     # Match each .1.txt file in the folder
     for file1 in "$dir"/*.1.txt; do
@@ -16,7 +16,7 @@ for dir in Testcase*/; do
 
         # Run diff -u with .1 file first and .2 file second
         # diff exits with code 1 if files differ
-        if ! diff -u "$file1" "$file2" > /dev/null 2>&1; then
+        if ! cmp -s "$file1" "$file2"; then
             mkdir -p "$diff_dir"
 
             base=$(basename "$file1")
